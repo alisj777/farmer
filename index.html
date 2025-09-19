@@ -215,6 +215,136 @@
             transform: translateY(0);
         }
         
+        /* 聊天界面样式 */
+        .chat-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #f5576c 75%, 
+                #4facfe 100%
+            );
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+            z-index: 2000;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chat-header h2 {
+            color: #000;
+            margin: 0;
+            font-size: 2.2em;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .close-chat {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: #000 !important;
+            font-size: 1.1em !important;
+            padding: 8px 16px !important;
+        }
+        
+        .chat-messages {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(248, 248, 248, 0.85);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            min-height: 60vh;
+            max-height: 70vh;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .chat-message {
+            margin: 15px 0;
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: fadeInMessage 0.3s ease-out;
+            background: rgba(135, 206, 250, 0.7);
+            margin-left: auto;
+            margin-right: 0;
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+        
+        .message-author {
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #666;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+        }
+        
+        .message-content {
+            font-size: 1em;
+            line-height: 1.4;
+            color: #333;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+        }
+        
+        .system-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin: 20px 0;
+            padding: 10px;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+        }
+        
+        .chat-controls {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .chat-controls .btn {
+            margin: 5px 10px;
+            font-size: 1em;
+            padding: 12px 24px;
+        }
+        
+        .auto-generating {
+            background: rgba(255, 193, 7, 0.7) !important;
+            color: #000 !important;
+        }
+        
+        @keyframes fadeInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         /* 响应式设计 */
         @media (max-width: 768px) {
             h1 {
@@ -233,6 +363,23 @@
             .favorites-section {
                 margin-top: 30px;
                 padding: 15px;
+            }
+            
+            .chat-container {
+                padding: 10px;
+            }
+            
+            .chat-messages {
+                min-height: 50vh;
+                max-height: 60vh;
+            }
+            
+            .chat-message {
+                max-width: 90%;
+            }
+            
+            .chat-header h2 {
+                font-size: 1.8em;
             }
         }
         
@@ -267,6 +414,7 @@
             <button class="btn" id="changeBtn">⟲ 换一句</button>
             <button class="btn" id="favoriteBtn">♡ 收藏</button>
             <button class="btn" id="shareBtn">↑ 分享</button>
+            <button class="btn" id="forumBtn">💬 大师论坛</button>
         </div>
         
         <!-- 收藏列表区域 -->
@@ -281,13 +429,29 @@
         </div>
     </div>
     
+    <!-- 聊天界面 -->
+    <div class="chat-container" id="chatContainer" style="display: none;">
+        <div class="chat-header">
+            <h2>大师论坛</h2>
+            <button class="btn close-chat" id="closeChatBtn">✕ 返回</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="system-message">欢迎来到大师论坛！大师们正在热烈讨论中...</div>
+        </div>
+        <div class="chat-controls">
+            <button class="btn" id="startAutoBtn">开始自动聊天</button>
+            <button class="btn" id="stopAutoBtn" style="display: none;">停止聊天</button>
+            <button class="btn" id="clearChatBtn">清空对话</button>
+        </div>
+    </div>
+    
     <!-- 通知提示 -->
     <div class="notification" id="notification">操作成功！</div>
 
     <script>
         // 语录数据库
-    var quotesData = [
-        // 飞语（妈）
+        var quotesData = [
+            // 飞语（妈）
             {
                 text: "\"太太正在奋笔疾书中\"",
                 source: "—— 飞语（妈）"
@@ -305,7 +469,7 @@
                 source: "—— 飞语（妈）"
             },
             {
-                text: "\"睡晕过去了）\"",
+                text: "\"睡晕过去了\"",
                 source: "—— 飞语（妈）"
             },
             {
@@ -340,7 +504,6 @@
                 text: "\"我要向所有人安利cv\"",
                 source: "—— 飞语（妈）"
             },
-          
             {
                 text: "\"黑道大小姐\"",
                 source: "—— 飞语（妈）"
@@ -361,7 +524,6 @@
                 text: "\"A9只跟A9玩\"",
                 source: "—— 飞语（妈）"
             },
-           
             {
                 text: "\"你是他唯一的软肋\"",
                 source: "—— 飞语（妈）"
@@ -435,12 +597,6 @@
                 source: "—— 黄1姐"
             },
             {
-                text: "\"笑鼠，恨了\"",
-                source: "—— CCC"
-            },
-            
-            // 黄
-            {
                 text: "\"我吃了\"",
                 source: "—— 黄1姐"
             },
@@ -453,14 +609,13 @@
                 source: "—— 黄1姐"
             },
             {
-                text: "\"“柱子，晚上来我家修电扇，你嫂子不在家”\"",
+                text: "\""柱子，晚上来我家修电扇，你嫂子不在家"\"",
                 source: "—— 黄1姐"
             },
             {
-                text: "\"“将军，夫人已经被您从南洋发配到堪培拉两年了。”“飞语认错了吗？”“没有，他已经在堪培拉成立妈家军准备攻打南洋了。”\"",
+                text: "\""将军，夫人已经被您从南洋发配到堪培拉两年了。""飞语认错了吗？""没有，他已经在堪培拉成立妈家军准备攻打南洋了。"\"",
                 source: "—— 黄1姐"
             },
-          
             {
                 text: "\"牛肉\"",
                 source: "—— 黄1姐"
@@ -481,7 +636,6 @@
                 text: "\"没八卦 不用翻了\"",
                 source: "—— 黄1姐"
             },
-        
             {
                 text: "\"开国皇帝李飞语\"",
                 source: "—— 黄1姐"
@@ -502,8 +656,6 @@
                 text: "\"我是社恐文静内向小女孩\"",
                 source: "—— 黄1姐"
             },
-            
-            // 胡师傅
             {
                 text: "\"澳国立也是国立\"",
                 source: "—— 胡师傅"
@@ -519,7 +671,7 @@
             {
                 text: "\"毕竟我也不学\"",
                 source: "—— 胡师傅"
-            },    
+            },
             {
                 text: "\"想抱大腿的一天\"",
                 source: "—— 胡师傅"
@@ -540,8 +692,6 @@
                 text: "\"妈去当up吧\"",
                 source: "—— 胡师傅"
             },
-            
-            // 思维方法类
             {
                 text: "\"咋镇多消息\"",
                 source: "—— 胡师傅"
@@ -562,7 +712,6 @@
                 text: "\"真该狠狠控制他了\"",
                 source: "—— 李师傅"
             },
-        
             {
                 text: "\"男同性恋\"",
                 source: "—— 李师傅"
@@ -583,7 +732,6 @@
                 text: "\"我上学期沉默如水\"",
                 source: "—— 鸡"
             },
-           
             {
                 text: "\"咱们真的生错年代了\"",
                 source: "—— 鸡"
@@ -601,10 +749,6 @@
                 source: "—— 鸡"
             },
             {
-                text: "\"是不是装货更容易成功…………\"",
-                source: "—— 鸡"
-            },
-            {
                 text: "\"妈家帮\"",
                 source: "—— 鸡"
             },
@@ -616,7 +760,6 @@
                 text: "\"我今天带了胡笔去和我们三笔团聚\"",
                 source: "—— 鸡"
             },
-           
             {
                 text: "\"一看妈师傅的前程 亮得我睁不开眼\"",
                 source: "—— 鸡"
@@ -636,15 +779,12 @@
             {
                 text: "\"吴布池\"",
                 source: "—— 鸡"
-            },
-        ]
+            }
+        ];
 
-            
-
-        
-        
         var currentQuoteIndex = 0;
         var favorites = [];
+        var autoGenerateInterval;
         
         // 初始化
         function init() {
@@ -666,6 +806,11 @@
             document.getElementById('favoriteBtn').onclick = toggleFavorite;
             document.getElementById('shareBtn').onclick = shareQuote;
             document.getElementById('clearBtn').onclick = clearAllFavorites;
+            document.getElementById('forumBtn').onclick = openChatForum;
+            document.getElementById('closeChatBtn').onclick = closeChatForum;
+            document.getElementById('startAutoBtn').onclick = startAutoGenerate;
+            document.getElementById('stopAutoBtn').onclick = stopAutoGenerate;
+            document.getElementById('clearChatBtn').onclick = clearChatMessages;
             
             // 键盘事件
             document.addEventListener('keydown', function(event) {
@@ -675,7 +820,7 @@
                 }
             });
             
-            console.log('毛选语录Bot初始化完成');
+            console.log('大师言初始化完成');
         }
         
         // 换一句语录
@@ -880,6 +1025,77 @@
             setTimeout(function() {
                 notification.classList.remove('show');
             }, 2000);
+        }
+        
+        // 聊天功能
+        function openChatForum() {
+            document.getElementById('chatContainer').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeChatForum() {
+            document.getElementById('chatContainer').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            stopAutoGenerate();
+        }
+        
+        function addChatMessage(author, content) {
+            var chatMessages = document.getElementById('chatMessages');
+            
+            var messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            messageDiv.innerHTML = 
+                '<div class="message-author">' + author + '</div>' +
+                '<div class="message-content">' + content + '</div>';
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // 自动滚动到底部
+            setTimeout(function() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 100);
+        }
+        
+        function generateRandomChat() {
+            var randomQuote = quotesData[Math.floor(Math.random() * quotesData.length)];
+            var author = randomQuote.source.replace(/——\s*/, '').replace(/（.*）/, '');
+            var content = randomQuote.text.replace(/"/g, '');
+            
+            addChatMessage(author, content);
+        }
+        
+        function startAutoGenerate() {
+            if (autoGenerateInterval) return;
+            
+            document.getElementById('startAutoBtn').style.display = 'none';
+            document.getElementById('stopAutoBtn').style.display = 'inline-block';
+            document.getElementById('stopAutoBtn').classList.add('auto-generating');
+            
+            // 立即生成一条
+            generateRandomChat();
+            
+            // 每1.5秒生成一条
+            autoGenerateInterval = setInterval(generateRandomChat, 1500);
+            showNotification('自动聊天已开始');
+        }
+        
+        function stopAutoGenerate() {
+            if (!autoGenerateInterval) return;
+            
+            clearInterval(autoGenerateInterval);
+            autoGenerateInterval = null;
+            
+            document.getElementById('startAutoBtn').style.display = 'inline-block';
+            document.getElementById('stopAutoBtn').style.display = 'none';
+            document.getElementById('stopAutoBtn').classList.remove('auto-generating');
+            
+            showNotification('自动聊天已停止');
+        }
+        
+        function clearChatMessages() {
+            var chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '<div class="system-message">欢迎来到大师论坛！大师们正在热烈讨论中...</div>';
         }
         
         // 页面加载完成后初始化
