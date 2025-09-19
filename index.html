@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>333大师知名语录</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            
+            /* 自定义渐变背景 */
+            background: linear-gradient(135deg, 
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #f5576c 75%, 
+                #4facfe 100%
+            );
+            
+            /* 添加背景纹理 */
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        /* 主容器 */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* 标题样式 */
+        h1 {
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            font-size: 3.5em;
+            color: #000000;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.3);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        /* 语录文本框 */
+        .quote-container {
+            background: rgba(248, 248, 248, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin: 30px 0;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .quote-container:hover {
+            background: rgba(250, 250, 250, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 语录文字 */
+        .quote-text {
+            font-size: 1.8em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+        }
+        
+        /* 语录出处 */
+        .quote-source {
+            font-size: 1.1em;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+        }
+        
+        /* 收藏状态指示器 */
+        .favorite-indicator {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #ff6b6b;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .favorite-indicator.show {
+            opacity: 1;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: transparent;
+            color: #000000;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 10px 20px;
+            font-size: 0.9em;
+            font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0px);
+        }
+        
+        .btn.favorited {
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+        
+        /* 收藏列表样式 */
+        .favorites-section {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .favorites-header {
+            color: #000;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .favorites-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .favorite-item {
+            background: rgba(255, 255, 255, 0.6);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .favorite-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .favorite-item .quote {
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+        
+        .favorite-item .source {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* 分享成功提示 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .quote-text {
+                font-size: 1.4em;
+            }
+            
+            .quote-container {
+                padding: 30px 20px;
+                margin: 20px 10px;
+            }
+            
+            .favorites-section {
+                margin-top: 30px;
+                padding: 15px;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>333大师之名语录</h1>
+        
+        <div class="quote-container fade-in" id="quoteContainer">
+            <div class="favorite-indicator" id="favoriteIndicator">♥</div>
+            <div class="quote-text" id="quoteText">"把饭倒进锅了，全身心吃这个"</div>
+            <div class="quote-source" id="quoteSource">——李飞语（妈）</div>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn" id="changeBtn">⟲ 换一句</button>
+            <button class="btn" id="favoriteBtn">♡ 收藏</button>
+            <button class="btn" id="shareBtn">↑ 分享</button>
+        </div>
+        
+        <!-- 收藏列表区域 -->
+        <div class="favorites-section" id="favoritesSection">
+            <div class="favorites-header">
+                <span>我的收藏 (<span id="favoriteCount">0</span>)</span>
+                <button class="btn" id="clearBtn" style="font-size: 0.8em; padding: 5px 12px;">清空</button>
+            </div>
+            <div class="favorites-list" id="favoritesList">
+                <p style="color: #666; text-align: center; margin: 20px 0;">还没有收藏的语录</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 通知提示 -->
+    <div class="notification" id="notification">操作成功！</div>
+
+    <script>
+        // 语录数据库
+    var quotesData = [
+        // 飞语（妈）
+            {
+                text: "\"太太正在奋笔疾书中\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"磕拉了\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"想吃甜的\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"低脂高蛋白\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"睡晕过去了）\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"这边的炒饭少有令我满意的\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"看着很普😧\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"我去天天买个东西不行？\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"我也想要\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"嗜学这一块\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"罗瑞菜又吃完了\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"这个数据整理真该背\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"没有调查，就没有发言权\"",
+                source: "—— 飞语（妈）年"
+            },
+          
+            {
+                text: "\"黑道大小姐\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"呃这确实，我是人\"",
+                source: "——飞语（妈）"
+            },
+            {
+                text: "\"妈家骑\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"黄姐不比他优秀一亿倍\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"A9只跟A9玩\"",
+                source: "—— 飞语（妈）"
+            },
+           
+            {
+                text: "\"你是他唯一的软肋\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"把两个人带进婚姻的不是爱情\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"哈吉米纳北路多哈吉卡哈吉\"",
+                source: "—— 飞语（妈）"
+            },
+            {
+                text: "\"这个我也吃了\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"以后谁请客吃饭不想叫我就加牛肉\"",
+                source: "—— 黄1姐"
+            },
+            
+            // 领导与管理类
+            {
+                text: "\"我吃了\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"我要吃我要吃\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"我不是黄石柱\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"“柱子，晚上来我家修电扇，你嫂子不在家”\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"“将军，夫人已经被您从南洋发配到堪培拉两年了。”“飞语认错了吗？”“没有，他已经在堪培拉成立妈家军准备攻打南洋了。”\"",
+                source: "—— 黄1姐"
+            },
+          
+            {
+                text: "\"牛肉\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"是不是我舔得太明显了（救命\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"我们这是神经病院\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"世界纷纷扰扰，飞语大展拳脚\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"没八卦 不用翻了\"",
+                source: "—— 黄1姐"
+            },
+        
+            {
+                text: "\"我又在舔jack\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"把我弄进去\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"准备开舔\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"爽打了\"",
+                source: "—— 黄1姐"
+            },
+            {
+                text: "\"我是社恐文静内向小女孩\"",
+                source: "—— 黄1姐"
+            },
+            
+            // 胡师傅
+            {
+                text: "\"澳国立也是国立\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"以后家人们富贵了勿忘我\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"租的房子要被卖了\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"毕竟我也不学\"",
+                source: "—— 胡师傅"
+            },    
+            {
+                text: "\"想抱大腿的一天\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"昨晚做了一半，发现有几个数据还跑错了\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"什么神秘组织\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"想不出一周不吃牛肉的日子\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"妈去当up吧\"",
+                source: "—— 胡师傅"
+            },
+            
+            // 思维方法类
+            {
+                text: "\"咋镇多消息\"",
+                source: "—— 胡师傅"
+            },
+            {
+                text: "\"少来一天我改姓猪头\"",
+                source: "—— 李师傅"
+            },
+            {
+                text: "\"我已就读尼赫鲁大学的国际关系学院\"",
+                source: "—— 李师傅"
+            },
+            {
+                text: "\"zl太出生了\"",
+                source: "—— 李师傅"
+            },
+            {
+                text: "\"真该狠狠控制他了\"",
+                source: "—— 李师傅"
+            },
+            
+            // 品格修养类
+            {
+                text: "\"男同性恋\"",
+                source: "—— 李师傅"
+            },
+            {
+                text: "\"战斗开始说是\"",
+                source: "—— 李师傅"
+            },
+            {
+                text: "\"小小团体！\"",
+                source: "—— 李师傅"
+            },
+            {
+                text: "\"坏了 被正主抓包了\"",
+                source: "—— rj"
+            },
+            {
+                text: "\"我上学期沉默如水\"",
+                source: "—— rj"
+            },
+           
+            {
+                text: "\"咱们真的生错年代了\"",
+                source: "—— rj"
+            },
+            {
+                text: "\"我是嫡系\"",
+                source: "—— rj"
+            },
+            {
+                text: "\"好饿啊怎么办\"",
+                source: " —— rj"
+            },
+            {
+                text: "\"是不是装货更容易成功…………\"",
+                source: "—— rj"
+            },
+            {
+                text: "\"是不是装货更容易成功…………\"",
+                source: "—— rj"
+            },
+            // 坚持与恒心类
+            {
+                text: "\"妈家帮\"",
+                source: "—— rj"
+            },
+            {
+                text: "\"澳洲你害我太深\"",
+                source: "—— rj"
+            },
+            {
+                text: "\"我今天带了胡笔去和我们三笔团聚\"",
+                source: "—— rj"
+            },
+           
+            {
+                text: "\"一看妈师傅的前程 亮得我睁不开眼\"",
+                source: "—— rj"
+            },
+            // 思维方法类
+            {
+                text: "\"不管了明天进攻港新\"",
+                source: "—— rj"
+            },
+            
+        ]
+
+            
+
+        
+        
+        var currentQuoteIndex = 0;
+        var favorites = [];
+        
+        // 初始化
+        function init() {
+            // 从本地存储加载收藏
+            try {
+                var saved = localStorage.getItem('maoquotes_favorites');
+                if (saved) {
+                    favorites = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.log('加载收藏失败:', e);
+            }
+            
+            updateFavoriteDisplay();
+            renderFavoritesList();
+            
+            // 绑定按钮事件
+            document.getElementById('changeBtn').onclick = changeQuote;
+            document.getElementById('favoriteBtn').onclick = toggleFavorite;
+            document.getElementById('shareBtn').onclick = shareQuote;
+            document.getElementById('clearBtn').onclick = clearAllFavorites;
+            
+            // 键盘事件
+            document.addEventListener('keydown', function(event) {
+                if (event.code === 'Space') {
+                    event.preventDefault();
+                    changeQuote();
+                }
+            });
+            
+            console.log('毛选语录Bot初始化完成');
+        }
+        
+        // 换一句语录
+        function changeQuote() {
+            console.log('换一句被点击');
+            
+            // 随机选择语录，避免重复
+            var newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * quotesData.length);
+            } while (newIndex === currentQuoteIndex && quotesData.length > 1);
+            
+            currentQuoteIndex = newIndex;
+            var quote = quotesData[currentQuoteIndex];
+            
+            // 获取页面元素
+            var container = document.getElementById('quoteContainer');
+            var textElement = document.getElementById('quoteText');
+            var sourceElement = document.getElementById('quoteSource');
+            
+            // 添加淡出效果
+            container.style.opacity = '0.3';
+            container.style.transform = 'translateY(10px)';
+            
+            // 延迟更新内容
+            setTimeout(function() {
+                textElement.textContent = quote.text;
+                sourceElement.textContent = quote.source;
+                
+                updateFavoriteDisplay();
+                
+                // 淡入效果
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 200);
+        }
+        
+        // 切换收藏状态
+        function toggleFavorite() {
+            console.log('收藏被点击');
+            
+            var quoteId = currentQuoteIndex;
+            var favoriteBtn = document.getElementById('favoriteBtn');
+            
+            var index = favorites.indexOf(quoteId);
+            if (index > -1) {
+                // 取消收藏
+                favorites.splice(index, 1);
+                favoriteBtn.textContent = '♡ 收藏';
+                favoriteBtn.classList.remove('favorited');
+                showNotification('已取消收藏');
+            } else {
+                // 添加收藏
+                favorites.push(quoteId);
+                favoriteBtn.textContent = '♥ 已收藏';
+                favoriteBtn.classList.add('favorited');
+                showNotification('收藏成功！');
+            }
+            
+            // 保存到本地存储
+            try {
+                localStorage.setItem('maoquotes_favorites', JSON.stringify(favorites));
+            } catch (e) {
+                console.log('保存收藏失败:', e);
+            }
+            
+            updateFavoriteDisplay();
+            renderFavoritesList();
+        }
+        
+        // 更新收藏状态显示
+        function updateFavoriteDisplay() {
+            var favoriteBtn = document.getElementById('favoriteBtn');
+            var favoriteIndicator = document.getElementById('favoriteIndicator');
+            
+            if (favorites.indexOf(currentQuoteIndex) > -1) {
+                favoriteBtn.textContent = '♥ 已收藏';
+                favoriteBtn.classList.add('favorited');
+                favoriteIndicator.classList.add('show');
+            } else {
+                favoriteBtn.textContent = '♡ 收藏';
+                favoriteBtn.classList.remove('favorited');
+                favoriteIndicator.classList.remove('show');
+            }
+            
+            document.getElementById('favoriteCount').textContent = favorites.length;
+        }
+        
+        // 渲染收藏列表
+        function renderFavoritesList() {
+            var favoritesList = document.getElementById('favoritesList');
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p style="color: #666; text-align: center; margin: 20px 0;">还没有收藏的语录</p>';
+                return;
+            }
+            
+            var html = '';
+            for (var i = 0; i < favorites.length; i++) {
+                var quoteId = favorites[i];
+                var quote = quotesData[quoteId];
+                html += '<div class="favorite-item" data-quote-id="' + quoteId + '">';
+                html += '<div class="quote">' + quote.text + '</div>';
+                html += '<div class="source">' + quote.source + '</div>';
+                html += '</div>';
+            }
+            
+            favoritesList.innerHTML = html;
+            
+            // 为收藏项添加点击事件
+            var items = favoritesList.getElementsByClassName('favorite-item');
+            for (var i = 0; i < items.length; i++) {
+                items[i].onclick = function() {
+                    var quoteId = parseInt(this.getAttribute('data-quote-id'));
+                    showQuote(quoteId);
+                };
+            }
+        }
+        
+        // 显示指定语录
+        function showQuote(quoteId) {
+            currentQuoteIndex = quoteId;
+            var quote = quotesData[quoteId];
+            
+            document.getElementById('quoteText').textContent = quote.text;
+            document.getElementById('quoteSource').textContent = quote.source;
+            
+            updateFavoriteDisplay();
+            
+            // 滚动到语录区域
+            document.getElementById('quoteContainer').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+        
+        // 清空所有收藏
+        function clearAllFavorites() {
+            if (favorites.length === 0) {
+                showNotification('收藏列表已经是空的');
+                return;
+            }
+            
+            if (confirm('确定要清空所有收藏吗？')) {
+                favorites = [];
+                try {
+                    localStorage.setItem('maoquotes_favorites', JSON.stringify(favorites));
+                } catch (e) {
+                    console.log('保存失败:', e);
+                }
+                updateFavoriteDisplay();
+                renderFavoritesList();
+                showNotification('已清空收藏列表');
+            }
+        }
+        
+        // 分享语录
+        function shareQuote() {
+            console.log('分享被点击');
+            
+            var currentQuote = quotesData[currentQuoteIndex];
+            var shareText = currentQuote.text + '\n\n' + currentQuote.source + '\n\n来自：毛选语录Bot';
+            
+            // 尝试复制到剪贴板
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText).then(function() {
+                    showNotification('已复制到剪贴板！');
+                }).catch(function() {
+                    fallbackCopy(shareText);
+                });
+            } else {
+                fallbackCopy(shareText);
+            }
+        }
+        
+        // 降级复制方法
+        function fallbackCopy(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showNotification('已复制到剪贴板！');
+            } catch (err) {
+                console.error('复制失败:', err);
+                alert('分享内容：\n\n' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            var notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(function() {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+        
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
