@@ -109,6 +109,28 @@
             opacity: 1;
         }
         
+        /* 论坛按钮独立样式 */
+        .forum-button-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .forum-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .forum-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+            border-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        }
+        
         /* 按钮样式 */
         .btn {
             background: transparent;
@@ -223,16 +245,12 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, 
-                #667eea 0%, 
-                #764ba2 25%, 
-                #f093fb 50%, 
-                #f5576c 75%, 
-                #4facfe 100%
+                #ffffff 0%, 
+                #f8f9fa 25%, 
+                #f1f3f4 50%, 
+                #e9ecef 75%, 
+                #dee2e6 100%
             );
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            background-attachment: fixed;
             z-index: 2000;
             padding: 20px;
             box-sizing: border-box;
@@ -244,14 +262,15 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.8);
             padding: 15px 20px;
             border-radius: 15px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         .chat-header h2 {
-            color: #000;
+            color: #333;
             margin: 0;
             font-size: 2.2em;
             font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
@@ -260,45 +279,75 @@
         }
         
         .close-chat {
-            background: rgba(255, 255, 255, 0.2) !important;
-            color: #000 !important;
+            background: rgba(255, 255, 255, 0.7) !important;
+            color: #333 !important;
             font-size: 1.1em !important;
             padding: 8px 16px !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .close-chat:hover {
+            background: rgba(255, 255, 255, 0.9) !important;
         }
         
         .chat-messages {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: rgba(248, 248, 248, 0.85);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            background: transparent;
+            border-radius: 0;
+            backdrop-filter: none;
             min-height: 60vh;
             max-height: 70vh;
             overflow-y: auto;
             margin-bottom: 20px;
         }
         
+        /* 消息气泡样式 */
         .chat-message {
             margin: 15px 0;
-            padding: 12px 18px;
-            border-radius: 18px;
-            max-width: 80%;
-            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
             animation: fadeInMessage 0.3s ease-out;
-            background: rgba(135, 206, 250, 0.7);
-            margin-left: auto;
-            margin-right: 0;
-            text-align: left;
-            backdrop-filter: blur(5px);
+            clear: both;
+        }
+        
+        .chat-message.right {
+            align-items: flex-end;
+        }
+        
+        .chat-message.left {
+            align-items: flex-start;
         }
         
         .message-author {
             font-size: 0.8em;
-            font-weight: bold;
-            margin-bottom: 5px;
             color: #666;
+            margin-bottom: 5px;
             font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            font-weight: 500;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .chat-message.right .message-bubble {
+            background: rgba(240, 248, 255, 0.8);
+            border-radius: 18px 18px 5px 18px;
+            border: 1px solid rgba(176, 196, 222, 0.3);
+        }
+        
+        .chat-message.left .message-bubble {
+            background: rgba(250, 240, 250, 0.8);
+            border-radius: 18px 18px 18px 5px;
+            border: 1px solid rgba(216, 191, 216, 0.3);
         }
         
         .message-content {
@@ -306,6 +355,7 @@
             line-height: 1.4;
             color: #333;
             font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            margin: 0;
         }
         
         .system-message {
@@ -315,18 +365,32 @@
             margin: 20px 0;
             padding: 10px;
             font-family: '楷体', 'KaiTi', '华文楷体', 'STKaiti', serif;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
         }
         
         .chat-controls {
             text-align: center;
             max-width: 800px;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
         
         .chat-controls .btn {
             margin: 5px 10px;
             font-size: 1em;
             padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-controls .btn:hover {
+            background: rgba(255, 255, 255, 0.95);
         }
         
         .auto-generating {
@@ -410,11 +474,15 @@
             <div class="quote-source" id="quoteSource">——飞语（妈）</div>
         </div>
         
+        <!-- 论坛按钮单独放置 -->
+        <div class="forum-button-section">
+            <button class="btn forum-btn" id="forumBtn">💬 大师论坛</button>
+        </div>
+        
         <div class="button-group">
             <button class="btn" id="changeBtn">⟲ 换一句</button>
             <button class="btn" id="favoriteBtn">♡ 收藏</button>
             <button class="btn" id="shareBtn">↑ 分享</button>
-            <button class="btn" id="forumBtn">💬 大师论坛</button>
         </div>
         
         <!-- 收藏列表区域 -->
@@ -436,7 +504,7 @@
             <button class="btn close-chat" id="closeChatBtn">✕ 返回</button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="system-message">欢迎来到大师论坛！大师们正在热烈讨论中...</div>
+            <div class="system-message">333已被占领，妈家帮扩展中...</div>
         </div>
         <div class="chat-controls">
             <button class="btn" id="startAutoBtn">开始自动聊天</button>
@@ -609,11 +677,11 @@
                 source: "—— 黄1姐"
             },
             {
-                text: "\""柱子，晚上来我家修电扇，你嫂子不在家"\"",
+                text: "'柱子，晚上来我家修电扇，你嫂子不在家'",
                 source: "—— 黄1姐"
             },
             {
-                text: "\""将军，夫人已经被您从南洋发配到堪培拉两年了。""飞语认错了吗？""没有，他已经在堪培拉成立妈家军准备攻打南洋了。"\"",
+                text: "'将军，夫人已经被您从南洋发配到堪培拉两年了。''飞语认错了吗？''没有，他已经在堪培拉成立妈家军准备攻打南洋了。'",
                 source: "—— 黄1姐"
             },
             {
@@ -786,8 +854,10 @@
         var favorites = [];
         var autoGenerateInterval;
         
-        // 初始化
+        // 初始化函数 - 添加更多调试信息
         function init() {
+            console.log('开始初始化大师言...');
+            
             // 从本地存储加载收藏
             try {
                 var saved = localStorage.getItem('maoquotes_favorites');
@@ -801,16 +871,71 @@
             updateFavoriteDisplay();
             renderFavoritesList();
             
-            // 绑定按钮事件
-            document.getElementById('changeBtn').onclick = changeQuote;
-            document.getElementById('favoriteBtn').onclick = toggleFavorite;
-            document.getElementById('shareBtn').onclick = shareQuote;
-            document.getElementById('clearBtn').onclick = clearAllFavorites;
-            document.getElementById('forumBtn').onclick = openChatForum;
-            document.getElementById('closeChatBtn').onclick = closeChatForum;
-            document.getElementById('startAutoBtn').onclick = startAutoGenerate;
-            document.getElementById('stopAutoBtn').onclick = stopAutoGenerate;
-            document.getElementById('clearChatBtn').onclick = clearChatMessages;
+            // 绑定按钮事件 - 添加调试信息
+            console.log('开始绑定事件...');
+            
+            var changeBtn = document.getElementById('changeBtn');
+            var favoriteBtn = document.getElementById('favoriteBtn');
+            var shareBtn = document.getElementById('shareBtn');
+            var forumBtn = document.getElementById('forumBtn');
+            var clearBtn = document.getElementById('clearBtn');
+            var closeChatBtn = document.getElementById('closeChatBtn');
+            var startAutoBtn = document.getElementById('startAutoBtn');
+            var stopAutoBtn = document.getElementById('stopAutoBtn');
+            var clearChatBtn = document.getElementById('clearChatBtn');
+            
+            // 检查元素是否存在
+            console.log('论坛按钮是否找到:', forumBtn ? '是' : '否');
+            
+            if (changeBtn) {
+                changeBtn.onclick = changeQuote;
+                console.log('换一句按钮事件绑定成功');
+            }
+            
+            if (favoriteBtn) {
+                favoriteBtn.onclick = toggleFavorite;
+                console.log('收藏按钮事件绑定成功');
+            }
+            
+            if (shareBtn) {
+                shareBtn.onclick = shareQuote;
+                console.log('分享按钮事件绑定成功');
+            }
+            
+            if (forumBtn) {
+                forumBtn.onclick = function() {
+                    console.log('论坛按钮被点击!');
+                    openChatForum();
+                };
+                console.log('论坛按钮事件绑定成功');
+            } else {
+                console.error('论坛按钮未找到!');
+            }
+            
+            if (clearBtn) {
+                clearBtn.onclick = clearAllFavorites;
+                console.log('清空按钮事件绑定成功');
+            }
+            
+            if (closeChatBtn) {
+                closeChatBtn.onclick = closeChatForum;
+                console.log('关闭聊天按钮事件绑定成功');
+            }
+            
+            if (startAutoBtn) {
+                startAutoBtn.onclick = startAutoGenerate;
+                console.log('开始自动聊天按钮事件绑定成功');
+            }
+            
+            if (stopAutoBtn) {
+                stopAutoBtn.onclick = stopAutoGenerate;
+                console.log('停止自动聊天按钮事件绑定成功');
+            }
+            
+            if (clearChatBtn) {
+                clearChatBtn.onclick = clearChatMessages;
+                console.log('清空对话按钮事件绑定成功');
+            }
             
             // 键盘事件
             document.addEventListener('keydown', function(event) {
@@ -1029,25 +1154,63 @@
         
         // 聊天功能
         function openChatForum() {
-            document.getElementById('chatContainer').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            console.log('打开大师论坛被调用');
+            var chatContainer = document.getElementById('chatContainer');
+            if (chatContainer) {
+                chatContainer.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                console.log('大师论坛已打开');
+                showNotification('欢迎来到大师论坛！');
+            } else {
+                console.error('找不到聊天容器元素');
+            }
         }
         
         function closeChatForum() {
-            document.getElementById('chatContainer').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            stopAutoGenerate();
+            console.log('关闭大师论坛');
+            var chatContainer = document.getElementById('chatContainer');
+            if (chatContainer) {
+                chatContainer.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                stopAutoGenerate();
+                console.log('大师论坛已关闭');
+            }
         }
+        
+        // 获取所有不同的作者名称
+        function getAllAuthors() {
+            var authors = [];
+            for (var i = 0; i < quotesData.length; i++) {
+                var author = quotesData[i].source.replace(/——\s*/, '').replace(/（.*）/, '');
+                if (authors.indexOf(author) === -1) {
+                    authors.push(author);
+                }
+            }
+            return authors;
+        }
+        
+        // 随机选择一个主要发言者（靠右显示）
+        var mainSpeaker = null;
         
         function addChatMessage(author, content) {
             var chatMessages = document.getElementById('chatMessages');
             
+            // 如果还没有选择主要发言者，随机选择一个
+            if (!mainSpeaker) {
+                var allAuthors = getAllAuthors();
+                mainSpeaker = allAuthors[Math.floor(Math.random() * allAuthors.length)];
+                console.log('选择的主要发言者:', mainSpeaker);
+            }
+            
             var messageDiv = document.createElement('div');
-            messageDiv.className = 'chat-message';
+            var isMainSpeaker = (author === mainSpeaker);
+            messageDiv.className = 'chat-message ' + (isMainSpeaker ? 'right' : 'left');
             
             messageDiv.innerHTML = 
                 '<div class="message-author">' + author + '</div>' +
-                '<div class="message-content">' + content + '</div>';
+                '<div class="message-bubble">' +
+                '<div class="message-content">' + content + '</div>' +
+                '</div>';
             
             chatMessages.appendChild(messageDiv);
             
@@ -1060,7 +1223,7 @@
         function generateRandomChat() {
             var randomQuote = quotesData[Math.floor(Math.random() * quotesData.length)];
             var author = randomQuote.source.replace(/——\s*/, '').replace(/（.*）/, '');
-            var content = randomQuote.text.replace(/"/g, '');
+            var content = randomQuote.text.replace(/"/g, '').replace(/'/g, '');
             
             addChatMessage(author, content);
         }
@@ -1095,15 +1258,37 @@
         
         function clearChatMessages() {
             var chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = '<div class="system-message">欢迎来到大师论坛！大师们正在热烈讨论中...</div>';
+            chatMessages.innerHTML = '<div class="system-message">333已被占领，妈家帮扩展中...</div>';
+            // 重置主要发言者
+            mainSpeaker = null;
         }
         
-        // 页面加载完成后初始化
+        // 确保DOM加载完成后再初始化
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM加载完成，开始初始化');
+                init();
+            });
         } else {
+            console.log('DOM已加载，直接初始化');
             init();
         }
+        
+        // 添加一个测试函数
+        function testForumButton() {
+            console.log('测试论坛按钮功能');
+            var btn = document.getElementById('forumBtn');
+            if (btn) {
+                console.log('论坛按钮找到了');
+                btn.click();
+            } else {
+                console.log('论坛按钮未找到');
+            }
+        }
+        
+        // 暴露测试函数到全局，方便调试
+        window.testForumButton = testForumButton;
+        window.openChatForum = openChatForum;
     </script>
 </body>
 </html>
